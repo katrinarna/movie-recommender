@@ -1,0 +1,57 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Movie Recommender</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+  <h1>🎬 Movie Recommender</h1>
+  <input id="movieInput" placeholder="Enter a movie title" />
+  <button onclick="getRecommendations()">Recommend</button>
+
+  <div id="results" style="margin-top: 40px;"></div>
+
+  <script>
+    function getRecommendations() {
+      const title = document.getElementById('movieInput').value;
+      fetch(`/recommend?title=${encodeURIComponent(title)}`)
+        .then(res => res.json())
+        .then(data => {
+          const container = document.getElementById('results');
+          container.innerHTML = '';
+
+          if (data.recommendations) {
+            data.recommendations.forEach(movie => {
+              const div = document.createElement('div');
+              div.className = 'movie-card';
+              div.innerHTML = `
+              <img src="${movie.poster}" alt="${movie.title}" />
+              <h3>${movie.title}</h3>
+              <p class="movie-overview" style="display: none; margin-top: 10px;">
+                <strong>Overview:</strong> ${movie.overview}<br><br>
+                <strong>Genres:</strong> ${movie.genres.join(', ')}<br>
+                <strong>Rating:</strong> ${movie.vote_average}/10<br>
+                <strong>Runtime:</strong> ${movie.runtime} minutes<br>
+                <strong>Release Date:</strong> ${movie.release_date}
+            </p>
+`;
+
+div.addEventListener("click", () => {
+  const p = div.querySelector(".movie-overview");
+  p.style.display = p.style.display === "none" ? "block" : "none";
+});
+
+              container.appendChild(div);
+            });
+          } else {
+            container.innerHTML = `<p>${data.error}</p>`;
+          }
+        });
+    }
+  </script>
+</body>
+</html>
+
+    
