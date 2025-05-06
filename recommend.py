@@ -1,29 +1,28 @@
+# This file contains the logic that figures out which movies to recommend.
+
+# It uses the cosine similarity of movie descriptions and genre matching to find similar movies.
+# It also fetches additional movie details from the TMDb API.
+# This file is our recommendation engine.
+
+
+# Importing data tools, similarity tools, and .env handling for API keys.
 import pandas as pd
 import requests
 import ast
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-
-# Load dataset
-df = pd.read_csv("movies.csv")
-df["overview"] = df["overview"].fillna("")
-
+# Loading the movie data and ensures overview is filled. Parses genre IDs from strings into lists.
 df = pd.read_csv("movies.csv")
 df["overview"] = df["overview"].fillna("")
 df["genre_ids"] = df["genre_ids"].apply(lambda x: ast.literal_eval(x) if isinstance(x, str) else [])
 
-# Convert text descriptions into numerical format
+# Converts overviews to vectors and computes similarity. Creates a mapping of title to index.
 vectorizer = TfidfVectorizer(stop_words="english")
 tfidf_matrix = vectorizer.fit_transform(df["overview"])
-
-# Compute similarity between movies
 cosine_sim = cosine_similarity(tfidf_matrix, tfidf_matrix)
-
-# Save mapping of movie titles to index positions
 indices = pd.Series(df.index, index=df["title"]).drop_duplicates()
 
-# TMDb API Key (Replace with your actual key)
 import os
 from dotenv import load_dotenv
 
@@ -31,10 +30,10 @@ load_dotenv()  # Load environment variables
 
 TMDB_API_KEY = os.getenv("TMDB_API_KEY")  # Fetch the API key
 
-# ✅ Debugging Print
+# Debugging Print
 print(f"✅ Loaded API Key: {TMDB_API_KEY}")  # Check if key is loaded
 
-
+# This function uses the TMDb API to find poster, genres, runtime, etc. for a movie title.
 def get_movie_details(title):
     print(f"\n🔥 FETCHING DETAILS FOR: {title}")
 
@@ -73,9 +72,11 @@ def get_movie_details(title):
         "runtime": detail_response.get("runtime", "N/A")
     }
 
-
-
-
+# Main function that:
+# Finds the input movie.
+# Calculates similarity to all others.
+# Boosts scores based on genre match and rating.
+# Returns top 5 movies with full metadata from TMDb.
 
 def recommend_movies(title, n=5):
     if title not in indices:
@@ -111,9 +112,6 @@ def recommend_movies(title, n=5):
         "runtime": movie_data["runtime"]
     })
     return {"recommendations": recommendations}
-
-
-
 
 
 # Flask Route
