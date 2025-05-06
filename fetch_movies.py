@@ -1,3 +1,5 @@
+# This script is only run once to build the movies.csv.
+# It fetches movie data from TMDb API and saves it to a CSV file.
 import requests
 import pandas as pd
 import os
@@ -27,9 +29,10 @@ def get_movies(page=1):
 
     return movies
 
-# Fetch thousands of movies
+# Calls the TMDb API to get a page of popular movies.
+# Collects movies from 100 pages (~2000 movies) and avoids API rate limits.
 all_movies = []
-TOTAL_PAGES = 100  # Adjust this number to fetch more (max ~500)
+TOTAL_PAGES = 100  # We can adjust this number to fetch more.
 for page in range(1, TOTAL_PAGES + 1):
     print(f"📥 Fetching page {page}...")
     all_movies.extend(get_movies(page))

@@ -1,3 +1,5 @@
+# Checking our API Key
+# Tells you if your .env file is working correctly and the API key is loaded.
 import os
 from dotenv import load_dotenv
 

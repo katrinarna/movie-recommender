@@ -1,18 +1,14 @@
-
-
+# This script is our mini lab for checking data.
 import pandas as pd
 
 df = pd.read_csv("movies.csv")
+#Shows the first few rows and some details about the data.
 print(df.head())
-print(df.info())  # Check for missing values & data types
+print(df.info()) 
 
+# Cleans up missing or duplicate data.
 df.fillna({"release_date": "Unknown", "overview": "No description available"}, inplace=True)
-
 df.drop_duplicates(subset="title", keep="first", inplace=True)
-
-import pandas as pd
-
-movies = pd.read_csv("movies.csv")
 
 # Print some sample movie titles to check formatting
 print(movies["title"].head(10))  
