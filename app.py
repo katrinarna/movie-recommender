@@ -11,7 +11,6 @@ from sklearn.metrics.pairwise import cosine_similarity
 # This creates the app. static_folder is where our CSS lives.
 app = Flask(__name__, static_folder="static")
 
-
 # Load movies dataset
 movies = pd.read_csv("movies.csv")
 
