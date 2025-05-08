@@ -7,9 +7,9 @@ from flask import Flask, request, jsonify, render_template
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-
+import os
 # This creates the app. static_folder is where our CSS lives.
-app = Flask(__name__, static_folder="static")
+app = Flask(__name__, template_folder="templates", static_folder="static")
 
 
 # Load movies dataset
@@ -35,8 +35,7 @@ def home():
     return render_template("index.html")
 
 # This imports the function from recommend.py that does the actual recommendation.
-from recommend import recommend_movies  
-
+from src.recommend import recommend_movies  
 
 # This responds to searches by calling the recommend function and returning the results in JSON.
 @app.route("/recommend")
