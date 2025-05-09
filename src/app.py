@@ -11,7 +11,6 @@ import os
 # This creates the app. static_folder is where our CSS lives.
 app = Flask(__name__, template_folder="templates", static_folder="static")
 
-
 # Load movies dataset
 movies = pd.read_csv("movies.csv")
 
