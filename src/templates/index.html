@@ -1,4 +1,3 @@
-<!-- templates/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +6,21 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-  <h1>🎬 Movie Recommender</h1>
+  <!-- Perfectly Centered Arched Title -->
+  <div class="title">
+    <svg width="900" height="250" viewBox="0 0 900 250">
+      <defs>
+        <path id="curvePath" d="M50,200 Q450,-100 850,200" fill="transparent"/>
+      </defs>
+      <text>
+        <textPath href="#curvePath" startOffset="50%" text-anchor="middle" style="font-size: 48px; font-weight: bold; fill: #ff0000; letter-spacing: 6px;">
+          MOVIE RECOMMENDER
+        </textPath>
+      </text>
+    </svg>
+  </div>
+  
+
   <input id="movieInput" placeholder="Enter a movie title" />
   <button onclick="getRecommendations()">Recommend</button>
 
@@ -35,13 +48,13 @@
                 <strong>Rating:</strong> ${movie.vote_average}/10<br>
                 <strong>Runtime:</strong> ${movie.runtime} minutes<br>
                 <strong>Release Date:</strong> ${movie.release_date}
-            </p>
-`;
+              </p>
+              `;
 
-div.addEventListener("click", () => {
-  const p = div.querySelector(".movie-overview");
-  p.style.display = p.style.display === "none" ? "block" : "none";
-});
+              div.addEventListener("click", () => {
+                const p = div.querySelector(".movie-overview");
+                p.style.display = p.style.display === "none" ? "block" : "none";
+              });
 
               container.appendChild(div);
             });
@@ -53,5 +66,3 @@ div.addEventListener("click", () => {
   </script>
 </body>
 </html>
-
-    
